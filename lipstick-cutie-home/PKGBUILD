@@ -1,0 +1,55 @@
+## $Id$
+# Maintainer: Erik Inkinen  <erik.inkinen@gmail.com>
+
+pkgname=lipstick-cutie-home
+_host="github.com"
+_project=cutie-shell
+_branch=master
+pkgver=0.1
+pkgrel=1
+pkgdesc="A mobile homescreen and shell for smartphones and tablets."
+arch=('x86_64' 'aarch64')
+url="https://$_host/$_project/cutie-home-lipstick"
+license=('BSD-3-Clause AND MIT')
+depends=('bluez-qt'
+	'qt5-graphicaleffects'
+	'qt5-multimedia'
+	'qt5-feedback'
+	'qtmpris'
+	'qt5-lipstick-cutie'
+	'geoclue>2.0'
+	'mlite'
+	'qt-mobility-haptics-ffmemless'
+	'ngfd'
+    'mce'
+    'dsme'
+    'ohm'
+    'pulseaudio-modules-nemo'
+    'pulseaudio-module-policy-enforcement'
+	'pulseaudio-module-keepalive')
+
+makedepends=('git' 'extra-cmake-modules' 'qt5-wayland' 'qt5-tools' 'nemo-qml-plugin-devicelock' 'bluez-qt' 'polkit-qt5')
+optdepends=()
+provides=("${pkgname}")
+conflicts=("${pkgname}")
+source=("${pkgname}::git+${url}")
+sha512sums=('SKIP')
+
+prepare() {
+    cd "${srcdir}/${pkgname}"
+}
+
+build() {
+  cd "${srcdir}/${pkgname}"
+  cmake -B build \
+        -DCMAKE_BUILD_TYPE=None \
+        -DCMAKE_INSTALL_PREFIX=/usr \
+        -DCMAKE_INSTALL_LIBDIR=lib \
+        -DCMAKE_INSTALL_SYSCONFDIR=/etc
+  make -C build
+}
+
+package() {
+  cd "${srcdir}/${pkgname}"
+  DESTDIR="$pkgdir" make -C build install
+}

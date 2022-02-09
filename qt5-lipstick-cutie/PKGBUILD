@@ -1,0 +1,57 @@
+## $Id$
+# Contributor: Alexey Andreyev <aa13q@ya.ru>
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Contributor: Chupligin Sergey (NeoChapay) <neochapay@gmail.com>
+# Contributor: James Kittsmiller (AJSlye) <james@nulogicsystems.com>
+# Maintainer: Erik Inkinen  <erik.inkinen@gmail.com>
+
+pkgname=qt5-lipstick-cutie
+pkgver=0.45.r0.g0b0f790f
+pkgrel=1
+pkgdesc="QML toolkit for homescreen creation"
+arch=('x86_64' 'aarch64')
+url="https://github.com/cutie-shell/lipstick.git"
+license=('LGPL-2.1-only')
+depends=('qt5-sensors-sensorfw'
+	    'qt5-wayland'
+	    'nemo-keepalive'
+	    'libresourceqt'
+	    'libsystemd'
+	    'mce-headers'
+	    'libmce-qt'
+	    'libngf-qt'
+	    'nemo-qml-plugin-devicelock'
+	    'nemo-qml-plugin-systemsettings'
+	    'pulseaudio'
+	    'bluez-qt')
+
+makedepends=('git' 'qt5-tools' 'doxygen' 'graphviz')
+provides=("${pkgname%-cutie}")
+source=("${pkgname}::git+${url}")
+sha256sums=('SKIP')
+
+
+pkgver() {
+  cd "${srcdir}/${pkgname}"
+  ( set -o pipefail
+    git describe --long --tags | sed 's/\([^-]*-g\)/r\1/;s/-/./g' ||
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+  ) 2>/dev/null
+}
+
+build() {
+  cd "${srcdir}/${pkgname}"
+  git submodule init
+  git submodule update
+  mkdir -p build
+  cd build
+  qmake ..
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}"
+  cd build
+  make -j 1 INSTALL_ROOT="${pkgdir}" install
+}
+ 

@@ -1,0 +1,24 @@
+## $Id$
+# Maintainer: Erik Inkinen  <erik.inkinen@gmail.com>
+
+pkgname=cutie-widget-playground
+pkgver=0.1
+pkgrel=1
+pkgdesc="A demo of Cutie widgets"
+arch=('x86_64' 'aarch64')
+url="https://github.com/cutie-shell/cutie-widget-playground"
+license=('BSD')
+depends=('qt5-declarative' 'qml-module-cutie')
+source=("${pkgname}::git+${url}")
+sha256sums=('SKIP')
+
+build() {
+    cd "${srcdir}/${pkgname}"
+    qmake
+    make
+}
+
+package() {
+    cd "${srcdir}/${pkgname}"
+    make -j 1 INSTALL_ROOT="$pkgdir/" install
+}

@@ -1,0 +1,45 @@
+# $Id$
+# Maintainer: Erik Inkinen  <erik.inkinen@gmail.com>
+
+_host="github.com"
+_project=cutie-shell
+_basename=cutie-keyboard
+_branch=master
+
+_gitname=$_basename
+pkgname=maliit-$_basename
+
+pkgver=0.99.2.r18.g89f1e862
+
+pkgrel=1
+pkgdesc="Cutie Keyboard (based on Ubuntu Keyboard)"
+arch=('x86_64' 'aarch64')
+url="https://$_host/$_project/$_gitname#branch=$_branch"
+license=('BSD')
+depends=('maliit-framework')
+makedepends=('git' 'cmake')
+source=("${pkgname}::git+${url}" "cutie-keyboard.service")
+sha256sums=('SKIP' 'SKIP')
+
+pkgver() {
+  cd "${srcdir}/${pkgname}"
+  ( set -o pipefail
+    git describe --long --tags | sed 's/\([^-]*-g\)/r\1/;s/-/./g' ||
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+  ) 2>/dev/null
+}
+
+build() {
+    cmake \
+        -B "${pkgname}/build" \
+        -S "${pkgname}" \
+        -DCMAKE_INSTALL_PREFIX:PATH='/usr'
+    make -C "${pkgname}/build" all
+}
+
+package() {
+    make -C "${srcdir}/${pkgname}/build" DESTDIR="$pkgdir" install
+    mkdir -p $pkgdir/usr/lib/systemd/user/graphical-session.target.wants/
+    cp ${srcdir}/cutie-keyboard.service $pkgdir/usr/lib/systemd/user/
+    ln -s ../cutie-keyboard.service $pkgdir/usr/lib/systemd/user/graphical-session.target.wants/
+}

@@ -1,0 +1,31 @@
+## $Id$
+# Maintainer: Erik Inkinen  <erik.inkinen@gmail.com>
+
+pkgname=pulseaudio-module-policy-enforcement
+pkgver=15.0
+pkgrel=1
+pkgdesc="Pulseaudio module for enforcing policy decisions in the audio domain"
+arch=('x86_64' 'aarch64')
+url="https://github.com/sailfishos/pulseaudio-policy-enforcement"
+license=('LGPLv2+')
+depends=('libpulse'
+    'pulseaudio' 'pulseaudio-modules-nemo')
+makedepends=('automake' 'autoconf' 'pulsecore-headers')
+source=("${pkgname}::git+${url}")
+sha256sums=('SKIP')
+
+build() {
+  cd "${srcdir}/${pkgname}"
+  echo 15.0 > .tarball-version
+  ./bootstrap.sh
+  ./configure --prefix=/usr \
+    --sysconfdir=/etc \
+    --sbindir=/usr/bin \
+    --disable-static
+    make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}"
+  make DESTDIR="${pkgdir}" install
+}

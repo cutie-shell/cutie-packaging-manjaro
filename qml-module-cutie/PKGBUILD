@@ -1,0 +1,24 @@
+## $Id$
+# Maintainer: Erik Inkinen  <erik.inkinen@gmail.com>
+
+pkgname=qml-module-cutie
+pkgver=0.1
+pkgrel=1
+pkgdesc="QML module for Cutie Widgets"
+arch=('x86_64' 'aarch64')
+url="https://github.com/cutie-shell/qml-module-cutie"
+license=('BSD')
+depends=('qt5-declarative')
+source=("${pkgname}::git+${url}")
+sha256sums=('SKIP')
+
+build() {
+    cd "${srcdir}/${pkgname}"
+    qmake
+    make
+}
+
+package() {
+    cd "${srcdir}/${pkgname}"
+    make -j 1 INSTALL_ROOT="$pkgdir/" install
+}
