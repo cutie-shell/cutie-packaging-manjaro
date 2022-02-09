@@ -1,0 +1,35 @@
+## $Id$
+# Maintainer: Erik Inkinen  <erik.inkinen@gmail.com>
+
+pkgname=cutie-wayland-session
+pkgver=0.8.r0.gaaa760a
+pkgrel=1
+pkgdesc="Cutie Wayland session"
+arch=('any')
+url="https://github.com/cutie-shell/cutie-wayland-session.git"
+license=('GPL-3.0-or-later')
+depends=('lipstick-cutie-home' 
+	'lightdm'
+	'pulseaudio-module-keepalive'
+	'ngfd-settings-nemo'
+	'profiled-settings-nemo')
+
+makedepends=('git')
+optdepends=()
+source=("${pkgname}::git+${url}")
+sha512sums=('SKIP')
+
+pkgver() {
+  cd "${srcdir}/${pkgname}"
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+
+prepare(){
+    cd "${srcdir}/${pkgname}"
+    mkdir -p "${pkgdir}"
+}
+
+package() {
+    cp -r ${srcdir}/${pkgname}/rootdir/* ${pkgdir}/
+}
