@@ -27,6 +27,7 @@ depends=('qt5-sensors-sensorfw'
 
 makedepends=('git' 'qt5-tools' 'doxygen' 'graphviz')
 provides=("${pkgname%-cutie}")
+conflicts=("${pkgname%-cutie}" "${pkgname%-cutie}-git")
 source=("${pkgname}::git+${url}")
 sha256sums=('SKIP')
 
