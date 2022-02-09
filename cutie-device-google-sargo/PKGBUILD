@@ -1,0 +1,31 @@
+## $Id$
+# Maintainer: Erik Inkinen <erik.inkinen@gmail.com>
+
+_host="github.com"
+_project=cutie-shell
+_basename=cutie-device-google-sargo
+_branch=master
+
+_gitname=$_basename
+pkgname=cutie-device-google-sargo
+
+pkgver=0.1
+pkgrel=1
+pkgdesc="Google Pixel 3a specific files for Cutie"
+arch=('aarch64')
+url="https://$_host/$_project/$_gitname#branch=$_branch"
+license=('BSD-3-Clause')
+depends=()
+
+makedepends=('git')
+provides=("${pkgname}")
+conflicts=("${pkgname}")
+source=("${pkgname}::git+${url}")
+sha256sums=('SKIP')
+
+package() {
+    mkdir -p ${pkgdir}
+
+    cp -r ${srcdir}/cutie-device-google-sargo/sparse/* ${pkgdir}/
+    sed -r "s/CUTIEVER/${pkgver}/" ${srcdir}/cutie-device-google-sargo/sparse/etc/hw-release > ${pkgdir}/etc/hw-release
+}
