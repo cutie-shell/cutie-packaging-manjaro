@@ -17,12 +17,14 @@ sha256sums=('SKIP')
 build() {
   cd "${srcdir}/${pkgname}"
   echo 15.0 > .tarball-version
-  ./bootstrap.sh
-  ./configure --prefix=/usr \
+  export MEEGOCOMMON_CFLAGS=" -D_REENTRANT -I/usr/include/pulsecore/modules"
+  export MEEGOCOMMON_LIBS=" -L/usr/lib/pulse-15.0/modules -lmeego-common"
+  autoreconf -vfi
+  CFLAGS="-g -O0" ./configure --prefix=/usr \
     --sysconfdir=/etc \
     --sbindir=/usr/bin \
     --disable-static
-    make
+  make
 }
 
 package() {
