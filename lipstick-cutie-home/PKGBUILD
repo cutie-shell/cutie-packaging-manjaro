@@ -35,6 +35,11 @@ conflicts=("${pkgname}")
 source=("${pkgname}::git+${url}")
 sha512sums=('SKIP')
 
+pkgver() {
+  cd "${srcdir}/${pkgname}"
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
 prepare() {
     cd "${srcdir}/${pkgname}"
 }

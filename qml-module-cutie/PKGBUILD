@@ -2,7 +2,7 @@
 # Maintainer: Erik Inkinen  <erik.inkinen@gmail.com>
 
 pkgname=qml-module-cutie
-pkgver=0.1
+pkgver=r18.ea68fb2
 pkgrel=1
 pkgdesc="QML module for Cutie Widgets"
 arch=('x86_64' 'aarch64')
@@ -11,6 +11,11 @@ license=('BSD')
 depends=('qt5-declarative')
 source=("${pkgname}::git+${url}")
 sha256sums=('SKIP')
+
+pkgver() {
+  cd "${srcdir}/${pkgname}"
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
 
 build() {
     cd "${srcdir}/${pkgname}"
