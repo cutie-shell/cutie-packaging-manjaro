@@ -3,15 +3,15 @@
 
 _host="github.com"
 _project=cutie-shell
-_basename=cutie-keyboard
+_basename=maliit-cutie-keyboard
 _branch=master
 
 _gitname=$_basename
-pkgname=maliit-$_basename
+pkgname=$_basename
 
 pkgver=0.99.2.r18.g89f1e862
 
-pkgrel=1
+pkgrel=2
 pkgdesc="Cutie Keyboard (based on Ubuntu Keyboard)"
 arch=('x86_64' 'aarch64')
 url="https://$_host/$_project/$_gitname#branch=$_branch"
@@ -23,7 +23,7 @@ sha256sums=('SKIP' 'SKIP')
 
 pkgver() {
   cd "${srcdir}/${pkgname}"
-  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+  printf "1.r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
 }
 
 build() {
