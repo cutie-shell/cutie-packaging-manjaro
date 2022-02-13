@@ -1,0 +1,39 @@
+## $Id$
+# Contributor: Chupligin Sergey (NeoChapay) <neochapay@gmail.com>
+# Maintainer: Erik Inkinen  <erik.inkinen@gmail.com>
+
+pkgname=libprolog-cutie
+pkgver=1.2.2
+pkgrel=1
+pkgdesc="A convenience library Nokia policy engine prolog library"
+arch=('x86_64' 'aarch64')
+url="https://github.com/sailfishos/libprolog"
+license=('LGPL-2.1-only')
+depends=('glib2' 'swi-prolog7')
+makedepends=('automake' 'autoconf')
+source=("${url}/archive/refs/tags/$pkgver.tar.gz")
+sha256sums=('0c38365b7135920500fa91ace019da4cc3642a26595fbba10ce5fe3e883cc49d')
+provides=('libprolog')
+conflicts=('libprolog')
+
+prepare() {
+    cd libprolog-$pkgver
+    echo -n "${pkgver}" > .tarball-version
+    ./autogen.sh --disable-static
+}
+
+build() {
+  cd libprolog-$pkgver
+  ./configure --prefix=/usr \
+    --sysconfdir=/etc \
+    --sbindir=/usr/bin \
+    --disable-static \
+    --enable-extra-warnings
+  make
+}
+
+package() {
+  cd libprolog-$pkgver
+  make DESTDIR="${pkgdir}" install
+}
+ 
